@@ -1,7 +1,9 @@
 # Mediciones — Laboratorio N°1 (Semana 2)
 
-**Equipo:** _______________   **Integrantes:** _______________ / _______________
-**Fecha:** 28-08-2026   **Entorno:** Docker Desktop (Windows) / otro: ________
+**Equipo:** andler-soto  
+**Integrantes:** Álvaro Andler / Elías Soto  
+**Fecha:** 28-08-2026  
+**Entorno:** Docker Desktop (Windows)
 
 ## Paso 1 — Línea base
 | Métrica | Valor |
@@ -23,9 +25,8 @@
 | 1% | 7.13Gbit/s |0.216s | La comunicación funciona, pero la pérdida provoca retransmisiones y mayor variabilidad.|
 | 5% | 223Mbits/sec| 1.468s| El throughput cayó fuertemente; el cliente siguió funcionando, pero con mayor tiempo total.|
 | 20% | 604Kbits/sec| 5.016s | La conexión quedó casi inutilizable hubo muchas retransmisiones, todo esto debido a la alta perdida.|
-| 100% (falla provocada) | — |	El cliente no pudo establecer la comunicación y terminó con el error Errno 113: No route to host. Con TIMEOUT_S=3, el cliente debería abandonar la espera después de aproximadamente 3 s si el fallo se manifiesta como timeout.
- | ¿Qué hizo el cliente? ¿Y con TIMEOUT_S=3? |
+| 100% (falla provocada) | — | — | El cliente no pudo establecer la comunicación y terminó con el error Errno 113: No route to host. Con TIMEOUT_S=3, el cliente debería abandonar la espera después de aproximadamente 3 s si el fallo se manifiesta como timeout.| 
 
 ## Falacia que asumimos sin advertirlo
-_______________________________________________________________
+
 El cliente asume que la red es confiable porque, por defecto, no tiene un timeout definido y espera que el servidor siempre responda. La prueba con pérdida del 100% muestra que el cliente puede quedar esperando o fallar después de varios segundos; al definir TIMEOUT_S=3, la aplicación detecta la falta de respuesta y aborta de forma controlada.
