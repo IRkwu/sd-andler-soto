@@ -15,9 +15,7 @@ HOST = "servidor"
 PORT = 5000
 TIMEOUT = 5.0   # segundos que esperamos una respuesta antes de rendirnos
 
-GUION = ["HOLA equipo", "ECO hola mundo", "CONTAR", "NOEXISTE", "SALIR"]
-GUION = ["HOLA equipo", "HORA", "SUMA 2 3",
-         "CONTAR", "SALIR"]
+GUION = ["HOLA equipo", "HORA", "SUMA 2 3", "CONTAR", "SALIR"]
 
 
 def enviar(sock, archivo, mensaje):
