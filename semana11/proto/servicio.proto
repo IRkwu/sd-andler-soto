@@ -1,0 +1,35 @@
+
+// Contrato del servicio, semana 11.
+// Dominio de geolocalización de vehículos.
+
+syntax = "proto3";
+
+package geolocalizacion.v1;
+
+service Geolocalizacion {
+
+  // Registra o actualiza la posición de un vehículo.
+  // Modifica estado: necesita id_solicitud para deduplicación.
+  rpc Posicion (PosicionSolicitud) returns (PosicionRespuesta);
+
+  // Consulta la posición de un vehículo.
+  // Solo lectura: se puede reintentar sin modificar el estado.
+  rpc Donde (DondeSolicitud) returns (PosicionRespuesta);
+}
+
+message PosicionSolicitud {
+  string id_solicitud = 1;
+  string vehiculo = 2;
+  double lat = 3;
+  double lon = 4;
+}
+
+message DondeSolicitud {
+  string vehiculo = 1;
+}
+
+message PosicionRespuesta {
+  string vehiculo = 1;
+  double lat = 2;
+  double lon = 3;
+}
