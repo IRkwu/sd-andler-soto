@@ -15,6 +15,10 @@ service Geolocalizacion {
   // Consulta la posición de un vehículo.
   // Solo lectura: se puede reintentar sin modificar el estado.
   rpc Donde (DondeSolicitud) returns (PosicionRespuesta);
+
+  // Consulta todos los vehículos registrados.
+  // Solo lectura: no necesita id_solicitud.
+  rpc ListarVehiculos (ListarVehiculosSolicitud) returns (ListaVehiculosRespuesta);
 }
 
 message PosicionSolicitud {
@@ -32,4 +36,17 @@ message PosicionRespuesta {
   string vehiculo = 1;
   double lat = 2;
   double lon = 3;
+}
+
+message ListarVehiculosSolicitud {
+}
+
+message Vehiculo {
+  string vehiculo = 1;
+  double lat = 2;
+  double lon = 3;
+}
+
+message ListaVehiculosRespuesta {
+  repeated Vehiculo vehiculos = 1;
 }

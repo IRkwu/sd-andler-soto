@@ -24,7 +24,7 @@ _sym_db = _symbol_database.Default()
 
 
 
-DESCRIPTOR = _descriptor_pool.Default().AddSerializedFile(b'\n\x0eservicio.proto\x12\x12geolocalizacion.v1\"U\n\x11PosicionSolicitud\x12\x14\n\x0cid_solicitud\x18\x01 \x01(\t\x12\x10\n\x08vehiculo\x18\x02 \x01(\t\x12\x0b\n\x03lat\x18\x03 \x01(\x01\x12\x0b\n\x03lon\x18\x04 \x01(\x01\"\"\n\x0e\x44ondeSolicitud\x12\x10\n\x08vehiculo\x18\x01 \x01(\t\"?\n\x11PosicionRespuesta\x12\x10\n\x08vehiculo\x18\x01 \x01(\t\x12\x0b\n\x03lat\x18\x02 \x01(\x01\x12\x0b\n\x03lon\x18\x03 \x01(\x01\x32\xbf\x01\n\x0fGeolocalizacion\x12X\n\x08Posicion\x12%.geolocalizacion.v1.PosicionSolicitud\x1a%.geolocalizacion.v1.PosicionRespuesta\x12R\n\x05\x44onde\x12\".geolocalizacion.v1.DondeSolicitud\x1a%.geolocalizacion.v1.PosicionRespuestab\x06proto3')
+DESCRIPTOR = _descriptor_pool.Default().AddSerializedFile(b'\n\x0eservicio.proto\x12\x12geolocalizacion.v1\"U\n\x11PosicionSolicitud\x12\x14\n\x0cid_solicitud\x18\x01 \x01(\t\x12\x10\n\x08vehiculo\x18\x02 \x01(\t\x12\x0b\n\x03lat\x18\x03 \x01(\x01\x12\x0b\n\x03lon\x18\x04 \x01(\x01\"\"\n\x0e\x44ondeSolicitud\x12\x10\n\x08vehiculo\x18\x01 \x01(\t\"?\n\x11PosicionRespuesta\x12\x10\n\x08vehiculo\x18\x01 \x01(\t\x12\x0b\n\x03lat\x18\x02 \x01(\x01\x12\x0b\n\x03lon\x18\x03 \x01(\x01\"\x1a\n\x18ListarVehiculosSolicitud\"6\n\x08Vehiculo\x12\x10\n\x08vehiculo\x18\x01 \x01(\t\x12\x0b\n\x03lat\x18\x02 \x01(\x01\x12\x0b\n\x03lon\x18\x03 \x01(\x01\"J\n\x17ListaVehiculosRespuesta\x12/\n\tvehiculos\x18\x01 \x03(\x0b\x32\x1c.geolocalizacion.v1.Vehiculo2\xad\x02\n\x0fGeolocalizacion\x12X\n\x08Posicion\x12%.geolocalizacion.v1.PosicionSolicitud\x1a%.geolocalizacion.v1.PosicionRespuesta\x12R\n\x05\x44onde\x12\".geolocalizacion.v1.DondeSolicitud\x1a%.geolocalizacion.v1.PosicionRespuesta\x12l\n\x0fListarVehiculos\x12,.geolocalizacion.v1.ListarVehiculosSolicitud\x1a+.geolocalizacion.v1.ListaVehiculosRespuestab\x06proto3')
 
 _globals = globals()
 _builder.BuildMessageAndEnumDescriptors(DESCRIPTOR, _globals)
@@ -37,6 +37,12 @@ if not _descriptor._USE_C_DESCRIPTORS:
   _globals['_DONDESOLICITUD']._serialized_end=159
   _globals['_POSICIONRESPUESTA']._serialized_start=161
   _globals['_POSICIONRESPUESTA']._serialized_end=224
-  _globals['_GEOLOCALIZACION']._serialized_start=227
-  _globals['_GEOLOCALIZACION']._serialized_end=418
+  _globals['_LISTARVEHICULOSSOLICITUD']._serialized_start=226
+  _globals['_LISTARVEHICULOSSOLICITUD']._serialized_end=252
+  _globals['_VEHICULO']._serialized_start=254
+  _globals['_VEHICULO']._serialized_end=308
+  _globals['_LISTAVEHICULOSRESPUESTA']._serialized_start=310
+  _globals['_LISTAVEHICULOSRESPUESTA']._serialized_end=384
+  _globals['_GEOLOCALIZACION']._serialized_start=387
+  _globals['_GEOLOCALIZACION']._serialized_end=688
 # @@protoc_insertion_point(module_scope)

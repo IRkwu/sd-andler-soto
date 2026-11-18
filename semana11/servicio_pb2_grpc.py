@@ -44,6 +44,11 @@ class GeolocalizacionStub(object):
                 request_serializer=servicio__pb2.DondeSolicitud.SerializeToString,
                 response_deserializer=servicio__pb2.PosicionRespuesta.FromString,
                 _registered_method=True)
+        self.ListarVehiculos = channel.unary_unary(
+                '/geolocalizacion.v1.Geolocalizacion/ListarVehiculos',
+                request_serializer=servicio__pb2.ListarVehiculosSolicitud.SerializeToString,
+                response_deserializer=servicio__pb2.ListaVehiculosRespuesta.FromString,
+                _registered_method=True)
 
 
 class GeolocalizacionServicer(object):
@@ -65,6 +70,14 @@ class GeolocalizacionServicer(object):
         context.set_details('Method not implemented!')
         raise NotImplementedError('Method not implemented!')
 
+    def ListarVehiculos(self, request, context):
+        """Consulta todos los vehículos registrados.
+        Solo lectura: no necesita id_solicitud.
+        """
+        context.set_code(grpc.StatusCode.UNIMPLEMENTED)
+        context.set_details('Method not implemented!')
+        raise NotImplementedError('Method not implemented!')
+
 
 def add_GeolocalizacionServicer_to_server(servicer, server):
     rpc_method_handlers = {
@@ -77,6 +90,11 @@ def add_GeolocalizacionServicer_to_server(servicer, server):
                     servicer.Donde,
                     request_deserializer=servicio__pb2.DondeSolicitud.FromString,
                     response_serializer=servicio__pb2.PosicionRespuesta.SerializeToString,
+            ),
+            'ListarVehiculos': grpc.unary_unary_rpc_method_handler(
+                    servicer.ListarVehiculos,
+                    request_deserializer=servicio__pb2.ListarVehiculosSolicitud.FromString,
+                    response_serializer=servicio__pb2.ListaVehiculosRespuesta.SerializeToString,
             ),
     }
     generic_handler = grpc.method_handlers_generic_handler(
@@ -133,6 +151,33 @@ class Geolocalizacion(object):
             '/geolocalizacion.v1.Geolocalizacion/Donde',
             servicio__pb2.DondeSolicitud.SerializeToString,
             servicio__pb2.PosicionRespuesta.FromString,
+            options,
+            channel_credentials,
+            insecure,
+            call_credentials,
+            compression,
+            wait_for_ready,
+            timeout,
+            metadata,
+            _registered_method=True)
+
+    @staticmethod
+    def ListarVehiculos(request,
+            target,
+            options=(),
+            channel_credentials=None,
+            call_credentials=None,
+            insecure=False,
+            compression=None,
+            wait_for_ready=None,
+            timeout=None,
+            metadata=None):
+        return grpc.experimental.unary_unary(
+            request,
+            target,
+            '/geolocalizacion.v1.Geolocalizacion/ListarVehiculos',
+            servicio__pb2.ListarVehiculosSolicitud.SerializeToString,
+            servicio__pb2.ListaVehiculosRespuesta.FromString,
             options,
             channel_credentials,
             insecure,

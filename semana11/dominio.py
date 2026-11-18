@@ -67,3 +67,15 @@ def donde(vehiculo):
             "lat": lat,
             "lon": lon
         }
+
+
+def listar_vehiculos():
+    with _lock:
+        return [
+            {
+                "vehiculo": vehiculo,
+                "lat": lat,
+                "lon": lon
+            }
+            for vehiculo, (lat, lon) in _vehiculos.items()
+        ]

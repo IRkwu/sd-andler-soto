@@ -5,6 +5,7 @@ Cliente gRPC del servicio de geolocalización, semana 11.
 Uso
     python cliente_grpc.py posicion moto1 -41.45 -72.90
     python cliente_grpc.py donde moto1
+    python cliente_grpc.py listar
     python cliente_grpc.py posicion moto1 -41.45 -72.90 --reintentos 2
 
 Variables
@@ -41,10 +42,10 @@ def main():
 
     ap.add_argument(
         "metodo",
-        choices=["posicion", "donde"]
+        choices=["posicion", "donde", "listar"]
     )
 
-    ap.add_argument("vehiculo")
+    ap.add_argument("vehiculo", nargs="?")
 
     ap.add_argument("lat", nargs="?", type=float)
     ap.add_argument("lon", nargs="?", type=float)
@@ -72,7 +73,7 @@ def main():
 
     if a.metodo == "posicion":
 
-        if a.lat is None or a.lon is None:
+        if a.vehiculo is None or a.lat is None or a.lon is None:
             ap.error("posicion requiere vehículo, latitud y longitud.")
 
         solicitud = pb.PosicionSolicitud(
@@ -84,13 +85,22 @@ def main():
 
         llamada = stub.Posicion
 
-    else:
+    elif a.metodo == "donde":
+
+        if a.vehiculo is None:
+            ap.error("donde requiere un vehículo.")
 
         solicitud = pb.DondeSolicitud(
             vehiculo=a.vehiculo
         )
 
         llamada = stub.Donde
+
+    else:
+
+        solicitud = pb.ListarVehiculosSolicitud()
+
+        llamada = stub.ListarVehiculos
 
     for intento in range(1, a.reintentos + 2):
 
@@ -117,7 +127,7 @@ def main():
 
             return 1
 
-        if a.metodo == "posicion":
+        if a.metodo in ["posicion", "donde"]:
 
             print(
                 f"[cliente] OK {resp.vehiculo} "
@@ -126,16 +136,26 @@ def main():
 
         else:
 
-            print(
-                f"[cliente] OK {resp.vehiculo} "
-                f"lat={resp.lat} lon={resp.lon}"
-            )
+            print("[cliente] Vehículos registrados:")
+
+            if not resp.vehiculos:
+                print("[cliente] No hay vehículos registrados.")
+
+            for vehiculo in resp.vehiculos:
+                print(
+                    f"[cliente] {vehiculo.vehiculo} "
+                    f"lat={vehiculo.lat} lon={vehiculo.lon}"
+                )
 
         return 0
 
     if a.metodo == "donde":
 
         print("[cliente] me rendí, sin respuesta del servidor")
+
+    elif a.metodo == "listar":
+
+        print("[cliente] me rendí, no pude obtener la lista de vehículos")
 
     else:
 

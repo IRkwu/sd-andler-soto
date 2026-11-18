@@ -83,6 +83,30 @@ class Geolocalizacion(pb_grpc.GeolocalizacionServicer):
     # aplicar: función que llama al dominio y devuelve un diccionario.
     # respuesta: clase del mensaje de respuesta generado desde el .proto.
 
+
+    def ListarVehiculos(self, request, context):
+        try:
+            resultado = dominio.listar_vehiculos()
+
+            vehiculos = [
+                pb.Vehiculo(**vehiculo)
+                for vehiculo in resultado
+            ]
+
+            log(f"ListarVehiculos -> {len(vehiculos)} vehículos")
+
+            return pb.ListaVehiculosRespuesta(
+                vehiculos=vehiculos
+            )
+
+        except Exception as e:
+            log(f"Error en ListarVehiculos: {e}")
+            context.abort(
+                grpc.StatusCode.INTERNAL,
+                "Error interno al listar los vehículos."
+            )
+
+
     def _modificar(self, nombre, request, context, aplicar, respuesta):
 
         ids = request.id_solicitud
