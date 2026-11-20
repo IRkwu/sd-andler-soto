@@ -138,7 +138,7 @@ Medición con `medir.py`, la misma operación de consulta sobre el mecanismo ele
 | pyro | listar | 200 | 0.28 | 0.35 | 0.28 | 0.6 | 121 |
 | grpc | listar | 200 | 0.63 | 0.67 | 0.65 | 4.12 | 54 |
 
-En los dos casos `listar` llama a `dominio.listar_vehiculos()` y no cambia estado. La fila de gRPC también quedó en `semana11/mediciones.csv`.
+En los dos casos `listar` llama a `dominio.listar_vehiculos()` y no cambia estado. Las filas también quedaron en `semana11/mediciones.csv` y `semana12/mediciones.csv`.
 
 **¿Qué explica la diferencia?**
 
