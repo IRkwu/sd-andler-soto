@@ -1,0 +1,7 @@
+# Imagen para los servicios de colas de la Semana 13.
+# Archivo aparte para no tocar el Dockerfile que ya tienen de semanas anteriores.
+FROM python:3.12-slim
+ENV PYTHONUNBUFFERED=1
+WORKDIR /app
+COPY . .
+RUN pip install --no-cache-dir -r requirements-colas.txt

@@ -1,0 +1,7 @@
+# Semana 13. Agreguen estas lineas al final de su archivo .env
+# (el mismo .env que crearon en la semana 12). Si no lo tienen, creen .env con esto.
+PREFETCH=1
+AUTO_ACK=0
+TRABAJO_SEG=3
+N=5000000
+TROZOS=40

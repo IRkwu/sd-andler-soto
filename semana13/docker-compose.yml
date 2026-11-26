@@ -1,0 +1,108 @@
+# Semana 12, objetos distribuidos con Pyro5.
+# Tres nodos en la red sd_net. Nada se publica hacia el host.
+#   nombres   servidor de nombres de Pyro5 (puerto 9090)
+#   servidor  daemon con los objetos del equipo (puerto 9100)
+#   cliente   contenedor para ejecutar cliente_pyro.py
+services:
+  nombres:
+    build: .
+    container_name: sd_nombres
+    command: python -m Pyro5.nameserver -n nombres -p 9090 -x
+    networks: [sd_net]
+
+  servidor:
+    build: .
+    container_name: sd_servidor
+    command: python servidor_pyro.py
+    environment:
+      SERVIDOR_HOST: servidor
+      SERVIDOR_PUERTO: "9100"
+      NOMBRES_HOST: nombres
+      NOMBRES_PUERTO: "9090"
+      EQUIPO: ${EQUIPO:-referencia}
+      MODO: ${MODO:-single}
+      POR_VALOR: ${POR_VALOR:-0}
+      REREGISTRO: ${REREGISTRO:-0}
+    depends_on: [nombres]
+    networks: [sd_net]
+
+  cliente:
+    build: .
+    container_name: sd_cliente
+    command: sleep infinity
+    environment:
+      NOMBRES_HOST: nombres
+      NOMBRES_PUERTO: "9090"
+      EQUIPO: ${EQUIPO:-referencia}
+    depends_on: [servidor]
+    networks: [sd_net]
+    
+  rabbitmq:
+    image: rabbitmq:4-management
+    container_name: sd_rabbitmq
+    hostname: rabbitmq
+    ports:
+      - "15672:15672"          # consola web http://localhost:15672 (guest / guest)
+    healthcheck:
+      test: ["CMD", "rabbitmq-diagnostics", "-q", "ping"]
+      interval: 5s
+      timeout: 5s
+      retries: 20
+    networks: [sd_net]
+
+  procesador:                  # paso 2 y 3, consumidor sin estado, se puede escalar
+    build: {context: ., dockerfile: Dockerfile.colas}
+    command: ["python", "procesador.py"]
+    environment:
+      PREFETCH: "${PREFETCH:-1}"
+      AUTO_ACK: "${AUTO_ACK:-0}"
+      TRABAJO_SEG: "${TRABAJO_SEG:-3}"
+    volumes: ["./:/app"]
+    depends_on:
+      rabbitmq: {condition: service_healthy}
+    restart: on-failure
+    networks: [sd_net]
+
+  publicador:                  # paso 2, se usa con  docker compose run --rm publicador ...
+    build: {context: ., dockerfile: Dockerfile.colas}
+    entrypoint: ["python", "publicador.py"]
+    environment:
+      PERSISTENTE: "1"
+    volumes: ["./:/app"]
+    depends_on:
+      rabbitmq: {condition: service_healthy}
+    profiles: ["herramientas"]
+    networks: [sd_net]
+
+  worker:                      # paso 4, se escala con  --scale worker=N
+    build: {context: ., dockerfile: Dockerfile.colas}
+    command: ["python", "worker.py"]
+    volumes: ["./:/app"]
+    depends_on:
+      rabbitmq: {condition: service_healthy}
+    restart: on-failure
+    networks: [sd_net]
+
+  master:                      # paso 4, se usa con  docker compose run --rm master
+    build: {context: ., dockerfile: Dockerfile.colas}
+    entrypoint: ["python", "master.py"]
+    environment:
+      N: "${N:-5000000}"
+      TROZOS: "${TROZOS:-40}"
+    volumes: ["./:/app"]
+    depends_on:
+      rabbitmq: {condition: service_healthy}
+    profiles: ["herramientas"]
+    networks: [sd_net]
+
+  graficar:                    # paso 5, no necesita el broker
+    build: {context: ., dockerfile: Dockerfile.colas}
+    entrypoint: ["python", "graficar.py"]
+    volumes: ["./:/app"]
+    profiles: ["herramientas"]
+    networks: [sd_net]
+
+
+networks:
+  sd_net:
+    name: sd_net
